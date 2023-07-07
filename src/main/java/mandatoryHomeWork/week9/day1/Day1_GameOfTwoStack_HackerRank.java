@@ -38,34 +38,41 @@ public class Day1_GameOfTwoStack_HackerRank {
 	}
 
 	/*
-	 * Pseudo code here 
-	 * 1. Create two pointers at start of both array list
-	 * 2. check both points and add the lowest one to the sum
-	 * 3. Loop until the sum value is less than target
+	 * Pseudo code here //https://www.youtube.com/watch?v=WMmST9al0DE
+	 * Note: If we think in normal way this wont works
+	 * so we need to apply greedy algorithm
 	 * 
+	 * 1. Iterate through first list and get the max count
+	 * 2. Now iterate to next loop and add the first value
+	 * 		if(sum>maxSum && list1count>0)
+	 * 		remove the one value from list1
+	 * 		
+	 * Complexity(o(m+n), space --> o(1)
 	 * 
 	 */
 			public static int twoStacks(int maxSum, List<Integer> a, List<Integer> b) {
-				int count = 0;
-				int left = 0;
-				int right = 0;
-				int totalSum = 0;
-				while (totalSum <= maxSum) {
-					if (left < a.size()) {
-						count++;
-						Integer l = a.get(left);
-						totalSum += (l);
-						left++;
-					}
-					if (right < a.size()) {
-						count++;
-						Integer r = a.get(right);
-						totalSum += (r);
-						right++;
-					}
-
+				
+				
+				int aCount = 0,  bCount=0, result=0, totalSum=0;
+				//Loop through the first list and get the max count
+				for(Integer aval:a) {
+					if(totalSum+aval>maxSum) break;
+					totalSum=totalSum+aval;
+					aCount++;
 				}
-				return count;
+				//update result as aCount
+				result=aCount;
+				
+				//Loop through the second list
+				for(Integer bval:b) {
+					totalSum=totalSum+bval;
+					bCount++;
+					while(totalSum>maxSum && aCount>0) { //if the toal sum is grater we will remove one value from a list
+						totalSum=totalSum-a.get(aCount-1);
+						aCount--;
+					}
+					//Update the result value
+					result=totalSum>=maxSum ? Math.max(aCount+bCount, result):result;
 			}
-		    
-}
+		    return result;
+}}
